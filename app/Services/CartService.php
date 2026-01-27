@@ -68,11 +68,6 @@ class CartService
             return $existingCart;
         }
 
-        // Remove any other subscriptions from cart (only one subscription at a time)
-        Cart::where('user_id', $user->id)
-            ->where('cartable_type', Subscription::class)
-            ->delete();
-
         return Cart::create([
             'user_id' => $user->id,
             'cartable_type' => Subscription::class,
