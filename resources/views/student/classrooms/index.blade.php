@@ -21,14 +21,14 @@
                             <p class="text-gray-600 text-sm mb-4">{{ Str::limit($classroom->description, 100) }}</p>
                         @endif
                         <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
-                            <span>{{ $classroom->activities_count }} aktivitas</span>
+                            <span>{{ $classroom->accessible_activities_count }} aktivitas dapat diakses</span>
                         </div>
 
-                        <!-- Recent Activities Preview -->
-                        @if($classroom->activities->count() > 0)
+                        <!-- Recent Accessible Activities Preview -->
+                        @if($classroom->recent_activities && $classroom->recent_activities->count() > 0)
                             <div class="border-t pt-3 mb-4">
                                 <p class="text-xs text-gray-500 mb-2">Aktivitas terbaru:</p>
-                                @foreach($classroom->activities as $activity)
+                                @foreach($classroom->recent_activities as $activity)
                                     <div class="flex items-center space-x-2 text-sm mb-1">
                                         @if($activity->type === 'youtube')
                                             <svg class="h-4 w-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">

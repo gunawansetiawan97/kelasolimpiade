@@ -7,6 +7,7 @@ use App\Models\Classroom;
 use App\Models\ClassroomActivity;
 use App\Models\ClassroomMember;
 use App\Models\User;
+use App\Models\UserSubscription;
 use Illuminate\Support\Collection;
 
 class ClassroomService
@@ -16,12 +17,16 @@ class ClassroomService
         return Classroom::whereHas('members', function ($query) use ($user) {
             $query->where('user_id', $user->id);
         })
-            ->with(['subscription', 'activities' => function ($query) {
-                $query->latest()->limit(3);
-            }])
-            ->withCount('activities')
+            ->with(['subscription'])
             ->active()
-            ->get();
+            ->get()
+            ->map(function ($classroom) use ($user) {
+                // Count accessible activities for this user
+                $classroom->accessible_activities_count = $this->getAccessibleActivitiesForUser($classroom, $user)->count();
+                // Get latest 3 accessible activities
+                $classroom->recent_activities = $this->getAccessibleActivitiesForUser($classroom, $user)->take(3);
+                return $classroom;
+            });
     }
 
     public function getClassroomActivities(Classroom $classroom): Collection
@@ -31,6 +36,83 @@ class ClassroomService
             ->orderByDesc('is_pinned')
             ->orderByDesc('created_at')
             ->get();
+    }
+
+    /**
+     * Get activities that are accessible to a specific user based on their subscription periods
+     */
+    public function getAccessibleActivitiesForUser(Classroom $classroom, User $user): Collection
+    {
+        // Get all subscription periods for this user and this classroom's subscription
+        $subscriptionPeriods = UserSubscription::where('user_id', $user->id)
+            ->where('subscription_id', $classroom->subscription_id)
+            ->get();
+
+        if ($subscriptionPeriods->isEmpty()) {
+            return collect();
+        }
+
+        // Get all activities
+        $activities = $classroom->activities()
+            ->with('admin')
+            ->orderByDesc('is_pinned')
+            ->orderByDesc('created_at')
+            ->get();
+
+        // Filter activities based on subscription periods
+        return $activities->filter(function ($activity) use ($subscriptionPeriods) {
+            foreach ($subscriptionPeriods as $subscription) {
+                // Activity is accessible if it was created during any subscription period
+                if ($activity->created_at >= $subscription->starts_at &&
+                    $activity->created_at <= $subscription->expires_at) {
+                    return true;
+                }
+            }
+            return false;
+        });
+    }
+
+    /**
+     * Check if a specific activity is accessible to a user
+     */
+    public function isActivityAccessibleToUser(ClassroomActivity $activity, User $user): bool
+    {
+        $classroom = $activity->classroom;
+
+        $subscriptionPeriods = UserSubscription::where('user_id', $user->id)
+            ->where('subscription_id', $classroom->subscription_id)
+            ->get();
+
+        foreach ($subscriptionPeriods as $subscription) {
+            if ($activity->created_at >= $subscription->starts_at &&
+                $activity->created_at <= $subscription->expires_at) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if user has any subscription (active or expired) for this classroom's subscription type
+     */
+    public function userHasAnySubscription(User $user, Classroom $classroom): bool
+    {
+        return UserSubscription::where('user_id', $user->id)
+            ->where('subscription_id', $classroom->subscription_id)
+            ->exists();
+    }
+
+    /**
+     * Check if user has active subscription for this classroom
+     */
+    public function userHasActiveSubscription(User $user, Classroom $classroom): bool
+    {
+        return UserSubscription::where('user_id', $user->id)
+            ->where('subscription_id', $classroom->subscription_id)
+            ->where('status', 'active')
+            ->where('expires_at', '>', now())
+            ->exists();
     }
 
     public function addMember(Classroom $classroom, User $user, Admin $admin): ClassroomMember
@@ -94,6 +176,7 @@ class ClassroomService
 
     public function userCanAccessClassroom(User $user, Classroom $classroom): bool
     {
+        // User can access classroom if they are a member (regardless of subscription status)
         return $classroom->hasMember($user);
     }
 }

@@ -34,8 +34,25 @@ class ClassroomController extends Controller
         }
 
         $classroom->load('subscription');
-        $activities = $this->classroomService->getClassroomActivities($classroom);
 
-        return view('student.classrooms.show', compact('classroom', 'activities'));
+        // Get only activities accessible to this user based on their subscription periods
+        $activities = $this->classroomService->getAccessibleActivitiesForUser($classroom, $user);
+
+        // Check subscription status
+        $hasActiveSubscription = $this->classroomService->userHasActiveSubscription($user, $classroom);
+
+        // Get total activities count (for showing "X more activities" message)
+        $totalActivitiesCount = $classroom->activities()->count();
+        $accessibleCount = $activities->count();
+        $lockedCount = $totalActivitiesCount - $accessibleCount;
+
+        return view('student.classrooms.show', compact(
+            'classroom',
+            'activities',
+            'hasActiveSubscription',
+            'totalActivitiesCount',
+            'accessibleCount',
+            'lockedCount'
+        ));
     }
 }

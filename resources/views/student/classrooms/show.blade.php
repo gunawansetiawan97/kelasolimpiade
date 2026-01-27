@@ -14,15 +14,61 @@
         <div class="flex justify-between items-start">
             <div>
                 <h1 class="text-2xl font-bold">{{ $classroom->name }}</h1>
-                <span class="px-2 py-1 text-xs rounded bg-purple-100 text-purple-800 mt-2 inline-block">
-                    {{ $classroom->subscription->name }}
-                </span>
+                <div class="flex items-center space-x-2 mt-2">
+                    <span class="px-2 py-1 text-xs rounded bg-purple-100 text-purple-800">
+                        {{ $classroom->subscription->name }}
+                    </span>
+                    @if($hasActiveSubscription)
+                        <span class="px-2 py-1 text-xs rounded bg-green-100 text-green-800">
+                            Langganan Aktif
+                        </span>
+                    @else
+                        <span class="px-2 py-1 text-xs rounded bg-gray-100 text-gray-600">
+                            Langganan Tidak Aktif
+                        </span>
+                    @endif
+                </div>
             </div>
         </div>
         @if($classroom->description)
             <p class="text-gray-600 mt-3">{{ $classroom->description }}</p>
         @endif
     </div>
+
+    <!-- Subscription Status Alert -->
+    @if(!$hasActiveSubscription)
+        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-6 rounded">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm text-yellow-700">
+                        <strong>Langganan Anda tidak aktif.</strong> Anda hanya dapat melihat aktivitas yang diposting saat langganan Anda aktif.
+                        @if($lockedCount > 0)
+                            Ada <strong>{{ $lockedCount }} aktivitas</strong> yang tidak dapat diakses.
+                        @endif
+                    </p>
+                    <p class="mt-2">
+                        <a href="{{ route('subscriptions.index') }}" class="text-yellow-700 font-medium underline hover:text-yellow-600">
+                            Perpanjang langganan untuk akses penuh
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- Locked Activities Info -->
+    @if($lockedCount > 0 && $hasActiveSubscription)
+        <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6 rounded">
+            <p class="text-sm text-blue-700">
+                Ada <strong>{{ $lockedCount }} aktivitas</strong> yang diposting di luar periode langganan Anda sebelumnya.
+            </p>
+        </div>
+    @endif
 
     <!-- Activities -->
     @if($activities->count() > 0)
@@ -118,8 +164,16 @@
             <svg class="h-16 w-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
             </svg>
-            <p class="text-gray-500">Belum ada aktivitas di kelas ini.</p>
-            <p class="text-sm text-gray-400 mt-2">Aktivitas akan muncul ketika admin menambahkannya.</p>
+            @if($lockedCount > 0)
+                <p class="text-gray-500">Tidak ada aktivitas yang dapat diakses.</p>
+                <p class="text-sm text-gray-400 mt-2">Ada {{ $lockedCount }} aktivitas yang tersedia jika Anda memperpanjang langganan.</p>
+                <a href="{{ route('subscriptions.index') }}" class="inline-block mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                    Perpanjang Langganan
+                </a>
+            @else
+                <p class="text-gray-500">Belum ada aktivitas di kelas ini.</p>
+                <p class="text-sm text-gray-400 mt-2">Aktivitas akan muncul ketika admin menambahkannya.</p>
+            @endif
         </div>
     @endif
 </div>
