@@ -54,20 +54,23 @@
                 </label>
             </div>
 
-            <div class="flex justify-between">
-                <form action="{{ route('admin.classrooms.destroy', $classroom) }}" method="POST"
-                    onsubmit="return confirm('Yakin ingin menghapus kelas ini? Semua anggota dan aktivitas akan dihapus.')">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Hapus</button>
-                </form>
-
-                <div class="flex space-x-4">
-                    <a href="{{ route('admin.classrooms.show', $classroom) }}" class="px-4 py-2 border rounded-lg hover:bg-gray-50">Batal</a>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Simpan</button>
-                </div>
+            <div class="flex justify-end space-x-4">
+                <a href="{{ route('admin.classrooms.show', $classroom) }}" class="px-4 py-2 border rounded-lg hover:bg-gray-50">Batal</a>
+                <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Simpan</button>
             </div>
         </form>
+
+        <!-- Delete Form (separate from update form) -->
+        <div class="mt-6 pt-6 border-t">
+            <form action="{{ route('admin.classrooms.destroy', $classroom) }}" method="POST"
+                onsubmit="return confirm('Yakin ingin menghapus kelas ini? Semua anggota dan aktivitas akan dihapus.')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                    Hapus Kelas
+                </button>
+            </form>
+        </div>
     </div>
 </div>
 @endsection
