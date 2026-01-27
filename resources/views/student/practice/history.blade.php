@@ -6,7 +6,8 @@
 <h1 class="text-2xl font-bold mb-6">Riwayat Latihan</h1>
 
 <div class="bg-white rounded-lg shadow overflow-hidden">
-    <table class="w-full">
+    <div class="overflow-x-auto">
+        <table class="w-full">
         <thead class="bg-gray-50">
             <tr>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Paket Soal</th>
@@ -43,8 +44,9 @@
                     <td colspan="5" class="px-6 py-4 text-center text-gray-500">Belum ada riwayat latihan</td>
                 </tr>
             @endforelse
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="mt-4">

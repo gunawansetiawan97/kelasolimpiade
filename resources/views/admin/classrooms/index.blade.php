@@ -38,7 +38,8 @@
     <!-- Table -->
     <div class="bg-white rounded-lg shadow overflow-hidden">
         @if($classrooms->count() > 0)
-            <table class="w-full">
+            <div class="overflow-x-auto">
+            <table class="w-full min-w-[700px]">
                 <thead class="bg-gray-50">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Kelas</th>
@@ -86,6 +87,7 @@
                     @endforeach
                 </tbody>
             </table>
+            </div>
             <div class="px-6 py-4 border-t">
                 {{ $classrooms->links() }}
             </div>
