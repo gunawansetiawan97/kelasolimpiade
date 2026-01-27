@@ -30,6 +30,11 @@ class Subscription extends Model
         return $this->hasMany(UserSubscription::class);
     }
 
+    public function classrooms()
+    {
+        return $this->hasMany(Classroom::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('is_active', true);

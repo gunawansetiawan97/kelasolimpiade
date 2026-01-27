@@ -30,6 +30,7 @@
                             @endif
                         </a>
                         <a href="{{ route('admin.subscriptions.index') }}" class="hover:bg-gray-700 px-3 py-2 rounded">Langganan</a>
+                        <a href="{{ route('admin.classrooms.index') }}" class="hover:bg-gray-700 px-3 py-2 rounded">Kelas</a>
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">

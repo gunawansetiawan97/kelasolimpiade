@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -62,6 +63,18 @@ class User extends Authenticatable
     public function userSubscriptions(): HasMany
     {
         return $this->hasMany(UserSubscription::class);
+    }
+
+    public function classrooms(): BelongsToMany
+    {
+        return $this->belongsToMany(Classroom::class, 'classroom_members')
+            ->withPivot(['added_by', 'joined_at'])
+            ->withTimestamps();
+    }
+
+    public function classroomMemberships(): HasMany
+    {
+        return $this->hasMany(ClassroomMember::class);
     }
 
     public function hasAccessToPackage(QuestionPackage $package): bool

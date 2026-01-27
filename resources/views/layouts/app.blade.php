@@ -21,6 +21,7 @@
                         <a href="{{ route('student.packages.index') }}" class="hover:bg-blue-700 px-3 py-2 rounded">Paket Soal</a>
                         <a href="{{ route('subscriptions.index') }}" class="hover:bg-blue-700 px-3 py-2 rounded">Langganan</a>
                         <a href="{{ route('student.practice.history') }}" class="hover:bg-blue-700 px-3 py-2 rounded">Riwayat</a>
+                        <a href="{{ route('student.classrooms.index') }}" class="hover:bg-blue-700 px-3 py-2 rounded">Kelas Saya</a>
                         <a href="{{ route('orders.index') }}" class="hover:bg-blue-700 px-3 py-2 rounded">Pesanan</a>
                     </div>
                 </div>

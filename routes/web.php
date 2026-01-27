@@ -21,6 +21,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\SubscriptionController as AdminSubscriptionController;
+use App\Http\Controllers\Admin\ClassroomController as AdminClassroomController;
+use App\Http\Controllers\Student\ClassroomController as StudentClassroomController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -92,6 +94,10 @@ Route::middleware(['auth', 'student'])->prefix('student')->name('student.')->gro
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile/password', [ProfileController::class, 'editPassword'])->name('profile.password');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+
+    // Classrooms
+    Route::get('/classrooms', [StudentClassroomController::class, 'index'])->name('classrooms.index');
+    Route::get('/classrooms/{classroom}', [StudentClassroomController::class, 'show'])->name('classrooms.show');
 });
 
 /*
@@ -180,4 +186,12 @@ Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function ()
     // Subscriptions
     Route::get('/subscriptions/subscribers', [AdminSubscriptionController::class, 'subscribers'])->name('subscriptions.subscribers');
     Route::resource('subscriptions', AdminSubscriptionController::class);
+
+    // Classrooms
+    Route::resource('classrooms', AdminClassroomController::class);
+    Route::post('/classrooms/{classroom}/members', [AdminClassroomController::class, 'addMember'])->name('classrooms.members.add');
+    Route::delete('/classrooms/{classroom}/members/{user}', [AdminClassroomController::class, 'removeMember'])->name('classrooms.members.remove');
+    Route::post('/classrooms/{classroom}/activities', [AdminClassroomController::class, 'storeActivity'])->name('classrooms.activities.store');
+    Route::delete('/activities/{activity}', [AdminClassroomController::class, 'destroyActivity'])->name('activities.destroy');
+    Route::post('/activities/{activity}/pin', [AdminClassroomController::class, 'togglePinActivity'])->name('activities.pin');
 });
