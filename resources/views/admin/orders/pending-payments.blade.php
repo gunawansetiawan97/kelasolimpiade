@@ -27,8 +27,8 @@
                 </div>
 
                 @if($payment->proof_image)
-                    <a href="{{ Storage::url($payment->proof_image) }}" target="_blank">
-                        <img src="{{ Storage::url($payment->proof_image) }}" alt="Bukti" class="w-full h-48 object-cover hover:opacity-75 transition">
+                    <a href="{{ url(config('app.storage_url', '/storage') . '/' . $payment->proof_image) }}" target="_blank">
+                        <img src="{{ url(config('app.storage_url', '/storage') . '/' . $payment->proof_image) }}" alt="Bukti" class="w-full h-48 object-cover hover:opacity-75 transition">
                     </a>
                 @endif
 

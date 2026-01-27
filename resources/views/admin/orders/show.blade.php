@@ -105,8 +105,8 @@
                     @if($order->payment->proof_image)
                         <div class="mb-4">
                             <p class="text-sm text-gray-600 mb-2">Bukti Transfer</p>
-                            <a href="{{ Storage::url($order->payment->proof_image) }}" target="_blank">
-                                <img src="{{ Storage::url($order->payment->proof_image) }}" alt="Bukti pembayaran" class="w-full rounded-lg border hover:opacity-75 transition">
+                            <a href="{{ url(config('app.storage_url', '/storage') . '/' . $order->payment->proof_image) }}" target="_blank">
+                                <img src="{{ url(config('app.storage_url', '/storage') . '/' . $order->payment->proof_image) }}" alt="Bukti pembayaran" class="w-full rounded-lg border hover:opacity-75 transition">
                             </a>
                         </div>
                     @endif

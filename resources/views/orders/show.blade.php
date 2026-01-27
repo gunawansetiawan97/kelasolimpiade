@@ -64,7 +64,7 @@
             <div class="p-6">
                 <div class="flex items-start space-x-4">
                     @if($order->payment->proof_image)
-                        <img src="{{ Storage::url($order->payment->proof_image) }}" alt="Bukti pembayaran" class="w-32 h-32 object-cover rounded-lg border">
+                        <img src="{{ url(config('app.storage_url', '/storage') . '/' . $order->payment->proof_image) }}" alt="Bukti pembayaran" class="w-32 h-32 object-cover rounded-lg border">
                     @endif
                     <div>
                         <p class="mb-2">
