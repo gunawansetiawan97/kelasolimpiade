@@ -49,6 +49,10 @@ class SubscriptionService
             return 0;
         }
 
-        return now()->diffInDays($userSubscription->expires_at, false);
+        // Calculate remaining days from start of today to expiry date
+        $now = now()->startOfDay();
+        $expiresAt = $userSubscription->expires_at->startOfDay();
+
+        return max(0, (int) $now->diffInDays($expiresAt, false));
     }
 }
