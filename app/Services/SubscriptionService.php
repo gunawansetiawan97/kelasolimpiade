@@ -22,6 +22,15 @@ class SubscriptionService
             ->first();
     }
 
+    public function getUserActiveSubscriptions(User $user): Collection
+    {
+        return $user->userSubscriptions()
+            ->active()
+            ->with('subscription')
+            ->orderBy('expires_at', 'desc')
+            ->get();
+    }
+
     public function hasActiveSubscription(User $user): bool
     {
         return $user->userSubscriptions()->active()->exists();

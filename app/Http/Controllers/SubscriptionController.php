@@ -18,24 +18,26 @@ class SubscriptionController extends Controller
     public function index()
     {
         $subscriptions = $this->subscriptionService->getActiveSubscriptions();
-        $userSubscription = null;
+        $userSubscriptionIds = collect();
 
         if (auth()->check()) {
-            $userSubscription = $this->subscriptionService->getUserActiveSubscription(auth()->user());
+            $userSubscriptionIds = $this->subscriptionService->getUserActiveSubscriptions(auth()->user())
+                ->pluck('subscription_id');
         }
 
-        return view('subscriptions.index', compact('subscriptions', 'userSubscription'));
+        return view('subscriptions.index', compact('subscriptions', 'userSubscriptionIds'));
     }
 
     public function mySubscription()
     {
-        $userSubscription = $this->subscriptionService->getUserActiveSubscription(auth()->user());
-        $remainingDays = 0;
+        $userSubscriptions = $this->subscriptionService->getUserActiveSubscriptions(auth()->user());
 
-        if ($userSubscription) {
-            $remainingDays = $this->subscriptionService->getRemainingDays($userSubscription);
-        }
+        // Calculate remaining days for each subscription
+        $userSubscriptions = $userSubscriptions->map(function ($sub) {
+            $sub->remaining_days = $this->subscriptionService->getRemainingDays($sub);
+            return $sub;
+        });
 
-        return view('subscriptions.my-subscription', compact('userSubscription', 'remainingDays'));
+        return view('subscriptions.my-subscription', compact('userSubscriptions'));
     }
 }

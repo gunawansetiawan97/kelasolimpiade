@@ -3,63 +3,66 @@
 @section('title', 'Langganan Saya')
 
 @section('content')
-<div class="max-w-2xl mx-auto">
+<div class="max-w-4xl mx-auto">
     <h1 class="text-2xl font-bold mb-6">Langganan Saya</h1>
 
-    @if($userSubscription)
-        <div class="bg-white rounded-lg shadow overflow-hidden">
-            <div class="p-6 border-b bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-                <h2 class="text-xl font-bold">{{ $userSubscription->subscription->name }}</h2>
-                <p class="text-blue-100">Langganan Aktif</p>
-            </div>
-            <div class="p-6">
-                <div class="grid grid-cols-2 gap-4 mb-6">
-                    <div>
-                        <p class="text-gray-600 text-sm">Mulai</p>
-                        <p class="font-semibold">{{ $userSubscription->starts_at->format('d M Y') }}</p>
+    @if($userSubscriptions->count() > 0)
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            @foreach($userSubscriptions as $userSubscription)
+                <div class="bg-white rounded-lg shadow overflow-hidden">
+                    <div class="p-6 border-b bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+                        <h2 class="text-xl font-bold">{{ $userSubscription->subscription->name }}</h2>
+                        <p class="text-blue-100">Langganan Aktif</p>
                     </div>
-                    <div>
-                        <p class="text-gray-600 text-sm">Berakhir</p>
-                        <p class="font-semibold">{{ $userSubscription->expires_at->format('d M Y') }}</p>
+                    <div class="p-6">
+                        <div class="grid grid-cols-2 gap-4 mb-6">
+                            <div>
+                                <p class="text-gray-600 text-sm">Mulai</p>
+                                <p class="font-semibold">{{ $userSubscription->starts_at->format('d M Y') }}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-600 text-sm">Berakhir</p>
+                                <p class="font-semibold">{{ $userSubscription->expires_at->format('d M Y') }}</p>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <p class="text-gray-600 text-sm mb-2">Sisa Waktu</p>
+                            <div class="flex items-center">
+                                <div class="text-3xl font-bold text-blue-600">{{ $userSubscription->remaining_days }}</div>
+                                <div class="ml-2 text-gray-600">hari lagi</div>
+                            </div>
+                        </div>
+
+                        @if($userSubscription->subscription->features && count($userSubscription->subscription->features) > 0)
+                            <div>
+                                <p class="text-gray-600 text-sm mb-2">Fitur:</p>
+                                <ul class="space-y-1">
+                                    @foreach($userSubscription->subscription->features as $feature)
+                                        <li class="flex items-center text-gray-700 text-sm">
+                                            <svg class="h-4 w-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            {{ $feature }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="px-6 py-4 bg-gray-50">
+                        <a href="{{ route('subscriptions.index') }}" class="text-blue-600 hover:text-blue-800 text-sm">
+                            Perpanjang Langganan &rarr;
+                        </a>
                     </div>
                 </div>
+            @endforeach
+        </div>
 
-                <div class="mb-6">
-                    <p class="text-gray-600 text-sm mb-2">Sisa Waktu</p>
-                    <div class="flex items-center">
-                        <div class="text-3xl font-bold text-blue-600">{{ $remainingDays }}</div>
-                        <div class="ml-2 text-gray-600">hari lagi</div>
-                    </div>
-                    <div class="mt-2 bg-gray-200 rounded-full h-2">
-                        @php
-                            $totalDays = $userSubscription->subscription->duration_days;
-                            $progress = ($remainingDays / $totalDays) * 100;
-                        @endphp
-                        <div class="bg-blue-600 rounded-full h-2" style="width: {{ $progress }}%"></div>
-                    </div>
-                </div>
-
-                @if($userSubscription->subscription->features && count($userSubscription->subscription->features) > 0)
-                    <div>
-                        <p class="text-gray-600 text-sm mb-2">Fitur yang Anda dapatkan:</p>
-                        <ul class="space-y-2">
-                            @foreach($userSubscription->subscription->features as $feature)
-                                <li class="flex items-center text-gray-700">
-                                    <svg class="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    {{ $feature }}
-                                </li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-            </div>
-            <div class="px-6 py-4 bg-gray-50">
-                <a href="{{ route('student.packages.index') }}" class="text-blue-600 hover:text-blue-800">
-                    Lihat Semua Paket Soal &rarr;
-                </a>
-            </div>
+        <div class="mt-6 text-center">
+            <a href="{{ route('student.packages.index') }}" class="text-blue-600 hover:text-blue-800">
+                Lihat Semua Paket Soal &rarr;
+            </a>
         </div>
     @else
         <div class="bg-white rounded-lg shadow p-8 text-center">

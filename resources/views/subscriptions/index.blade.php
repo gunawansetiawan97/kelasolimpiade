@@ -9,19 +9,21 @@
         <p class="text-gray-600">Dapatkan akses ke semua paket soal dengan berlangganan</p>
     </div>
 
-    @if($userSubscription)
-        <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="font-semibold text-green-800">Anda memiliki langganan aktif</h3>
-                    <p class="text-green-600">{{ $userSubscription->subscription->name }} - Berlaku hingga {{ $userSubscription->expires_at->format('d M Y') }}</p>
+    @auth
+        @if($userSubscriptionIds->count() > 0)
+            <div class="bg-green-50 border border-green-200 rounded-lg p-6 mb-8">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div>
+                        <h3 class="font-semibold text-green-800">Anda memiliki {{ $userSubscriptionIds->count() }} langganan aktif</h3>
+                        <p class="text-green-600 text-sm">Anda dapat memperpanjang langganan yang sudah ada atau menambah langganan baru</p>
+                    </div>
+                    <a href="{{ route('subscriptions.my') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-center">
+                        Lihat Detail
+                    </a>
                 </div>
-                <a href="{{ route('subscriptions.my') }}" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
-                    Lihat Detail
-                </a>
             </div>
-        </div>
-    @endif
+        @endif
+    @endauth
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         @forelse($subscriptions as $subscription)
@@ -54,7 +56,7 @@
                     @auth
                         <form action="{{ route('cart.add.subscription', $subscription) }}" method="POST">
                             @csrf
-                            @if($userSubscription && $userSubscription->subscription_id === $subscription->id)
+                            @if($userSubscriptionIds->contains($subscription->id))
                                 <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
                                     Perpanjang Langganan
                                 </button>
