@@ -117,13 +117,28 @@ class OrderService
                 } elseif ($item->orderable_type === Subscription::class) {
                     $subscription = Subscription::find($item->orderable_id);
                     if ($subscription) {
-                        UserSubscription::create([
-                            'user_id' => $order->user_id,
-                            'subscription_id' => $subscription->id,
-                            'starts_at' => now(),
-                            'expires_at' => now()->addDays($subscription->duration_days),
-                            'status' => 'active',
-                        ]);
+                        // Check if user has existing active subscription for this subscription type
+                        $existingSubscription = UserSubscription::where('user_id', $order->user_id)
+                            ->where('subscription_id', $subscription->id)
+                            ->where('status', 'active')
+                            ->where('expires_at', '>', now())
+                            ->first();
+
+                        if ($existingSubscription) {
+                            // Extend existing subscription duration
+                            $existingSubscription->update([
+                                'expires_at' => $existingSubscription->expires_at->addDays($subscription->duration_days),
+                            ]);
+                        } else {
+                            // Create new subscription
+                            UserSubscription::create([
+                                'user_id' => $order->user_id,
+                                'subscription_id' => $subscription->id,
+                                'starts_at' => now(),
+                                'expires_at' => now()->addDays($subscription->duration_days),
+                                'status' => 'active',
+                            ]);
+                        }
                     }
                 }
             }

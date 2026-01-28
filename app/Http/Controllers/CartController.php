@@ -53,11 +53,6 @@ class CartController extends Controller
             return back()->with('error', 'Paket langganan ini tidak tersedia.');
         }
 
-        // Check if user already has active subscription
-        if ($user->hasActiveSubscription()) {
-            return back()->with('error', 'Anda sudah memiliki langganan aktif.');
-        }
-
         $this->cartService->addSubscription($user, $subscription);
 
         return back()->with('success', 'Langganan berhasil ditambahkan ke keranjang.');

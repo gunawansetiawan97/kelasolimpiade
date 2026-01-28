@@ -52,18 +52,18 @@
                     @endif
 
                     @auth
-                        @if($userSubscription)
-                            <button disabled class="w-full bg-gray-300 text-gray-500 py-2 rounded-lg cursor-not-allowed">
-                                Sudah Berlangganan
-                            </button>
-                        @else
-                            <form action="{{ route('cart.add.subscription', $subscription) }}" method="POST">
-                                @csrf
+                        <form action="{{ route('cart.add.subscription', $subscription) }}" method="POST">
+                            @csrf
+                            @if($userSubscription && $userSubscription->subscription_id === $subscription->id)
+                                <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors">
+                                    Perpanjang Langganan
+                                </button>
+                            @else
                                 <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
                                     Pilih Paket
                                 </button>
-                            </form>
-                        @endif
+                            @endif
+                        </form>
                     @else
                         <a href="{{ route('login') }}" class="block w-full text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
                             Login untuk Berlangganan
