@@ -42,7 +42,7 @@
                             placeholder="Tulis jawaban Anda di sini...">{{ $currentAnswer->answer_text ?? '' }}</textarea>
                     @endif
 
-                    <div class="flex justify-between items-center mt-6">
+                    <div class="flex flex-col-reverse md:flex-row md:justify-between md:items-center mt-6 gap-3">
                         @php
                             $prevQuestion = $questions->where('order', '<', $question->order)->last();
                             $nextQuestion = $questions->where('order', '>', $question->order)->first();
@@ -50,12 +50,12 @@
 
                         @if($prevQuestion)
                             <a href="{{ route('student.exam.question', ['package' => $package, 'question' => $prevQuestion]) }}"
-                                class="px-4 py-2 border rounded-lg hover:bg-gray-50">Sebelumnya</a>
+                                class="px-4 py-2 border rounded-lg hover:bg-gray-50 text-center">Sebelumnya</a>
                         @else
-                            <div></div>
+                            <div class="hidden md:block"></div>
                         @endif
 
-                        <div class="space-x-2">
+                        <div class="flex flex-col md:flex-row gap-2">
                             <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
                                 Simpan
                             </button>
