@@ -48,6 +48,11 @@ class CartController extends Controller
     {
         $user = auth()->user();
 
+        // Check if subscription is active
+        if (!$subscription->is_active) {
+            return back()->with('error', 'Paket langganan ini tidak tersedia.');
+        }
+
         // Check if user already has active subscription
         if ($user->hasActiveSubscription()) {
             return back()->with('error', 'Anda sudah memiliki langganan aktif.');
