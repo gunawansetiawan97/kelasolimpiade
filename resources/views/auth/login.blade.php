@@ -54,8 +54,5 @@
 
     <hr class="my-6">
 
-    <p class="text-center text-gray-500 text-sm">
-        <a href="{{ route('admin.login') }}" class="hover:underline">Login sebagai Admin</a>
-    </p>
 </div>
 @endsection

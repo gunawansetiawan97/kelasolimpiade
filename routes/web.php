@@ -36,6 +36,11 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+// Landing pages for specific olympiad subjects
+Route::get('/olimpiade-matematika', function () {
+    return view('landing.matematika');
+})->name('landing.matematika');
+
 // Public subscription page
 Route::get('/subscriptions', [SubscriptionController::class, 'index'])->name('subscriptions.index');
 

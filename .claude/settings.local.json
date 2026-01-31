@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(composer require:*)",
+      "WebFetch(domain:asclepio.id)",
+      "Bash(php artisan make:migration:*)",
+      "Bash(php artisan migrate:*)",
+      "Bash(php artisan:*)",
+      "Bash(php artisan config:clear:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial commit - Kelas Olimpiade platform\n\nFeatures implemented:\n- Student authentication and profile management\n- Admin panel for managing packages and questions\n- Exam system with timer and auto-submit\n- Practice mode for past packages\n- E-commerce: shopping cart, checkout, order management\n- Manual bank transfer payment with admin verification\n- Subscription system for unlimited access\n- Excel import for bulk question creation\n- KaTeX support for math equations\n- Landing page with company profile\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(git commit:*)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(powershell -Command \"Remove-Item -Path ''d:\\\\Claude\\\\drmatematika\\\\app\\\\Http\\\\Controllers\\\\Admin'' -Recurse -Force\")",
+      "Bash(powershell -Command \"Remove-Item -Path ''d:\\\\Claude\\\\drmatematika\\\\resources\\\\views\\\\admin'' -Recurse -Force\")",
+      "Bash(powershell -Command \"Remove-Item -Path ''d:\\\\Claude\\\\drmatematika\\\\resources\\\\views\\\\layouts\\\\admin.blade.php'' -Force\")",
+      "Bash(powershell -Command \"Remove-Item -Path ''d:\\\\Claude\\\\drmatematika\\\\app\\\\Http\\\\Controllers\\\\Auth\\\\AdminLoginController.php'' -Force\")",
+      "Bash(powershell -Command \"Remove-Item -Path ''d:\\\\Claude\\\\admindrmatematika\\\\app\\\\Http\\\\Controllers\\\\Student'' -Recurse -Force\")",
+      "Bash(powershell -Command \"Remove-Item -Path ''d:\\\\Claude\\\\admindrmatematika\\\\resources\\\\views\\\\student'' -Recurse -Force\")",
+      "Bash(powershell -Command:*)"
+    ]
+  }
+}
