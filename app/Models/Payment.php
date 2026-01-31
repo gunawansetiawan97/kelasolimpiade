@@ -18,11 +18,19 @@ class Payment extends Model
         'verified_by',
         'verified_at',
         'admin_notes',
+        'xendit_invoice_id',
+        'xendit_invoice_url',
+        'xendit_expiry_date',
+        'xendit_payment_method',
+        'xendit_payment_channel',
+        'xendit_paid_at',
     ];
 
     protected $casts = [
         'amount' => 'decimal:2',
         'verified_at' => 'datetime',
+        'xendit_expiry_date' => 'datetime',
+        'xendit_paid_at' => 'datetime',
     ];
 
     public function order()

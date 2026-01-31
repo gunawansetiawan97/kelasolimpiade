@@ -39,28 +39,28 @@
         <div class="md:col-span-1">
             <div class="bg-white rounded-lg shadow overflow-hidden">
                 <div class="px-6 py-4 border-b bg-gray-50">
-                    <h2 class="font-semibold text-lg">Metode Pembayaran</h2>
+                    <h2 class="font-semibold text-lg">Pembayaran</h2>
                 </div>
                 <div class="p-6">
-                    <p class="text-sm text-gray-600 mb-4">Transfer Bank Manual</p>
-
-                    @foreach($bankAccounts as $bank)
-                        <div class="mb-4 p-3 border rounded-lg">
-                            <p class="font-semibold">{{ $bank['bank'] }}</p>
-                            <p class="text-lg font-mono">{{ $bank['account_number'] }}</p>
-                            <p class="text-sm text-gray-600">a.n. {{ $bank['account_name'] }}</p>
-                        </div>
-                    @endforeach
+                    <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                        <p class="text-sm text-blue-800 font-medium mb-2">Metode Pembayaran Tersedia:</p>
+                        <ul class="text-xs text-blue-700 space-y-1">
+                            <li>- Transfer Bank</li>
+                            <li>- Virtual Account</li>
+                            <li>- E-Wallet (OVO, DANA, dll)</li>
+                            <li>- QRIS</li>
+                        </ul>
+                    </div>
 
                     <form action="{{ route('checkout.process') }}" method="POST">
                         @csrf
                         <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-medium">
-                            Buat Pesanan
+                            Lanjutkan ke Pembayaran
                         </button>
                     </form>
 
                     <p class="text-xs text-gray-500 mt-3 text-center">
-                        Dengan melanjutkan, Anda setuju dengan syarat dan ketentuan kami.
+                        Anda akan diarahkan ke halaman pembayaran
                     </p>
                 </div>
             </div>

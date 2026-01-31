@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\SubscriptionController as AdminSubscriptionController;
 use App\Http\Controllers\Admin\ClassroomController as AdminClassroomController;
 use App\Http\Controllers\Student\ClassroomController as StudentClassroomController;
+use App\Http\Controllers\XenditWebhookController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -125,6 +126,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::delete('/orders/{order}', [OrderController::class, 'cancel'])->name('orders.cancel');
+    Route::post('/orders/{order}/retry-payment', [CheckoutController::class, 'retryPayment'])->name('orders.retry-payment');
 
     // Subscriptions
     Route::get('/my-subscription', [SubscriptionController::class, 'mySubscription'])->name('subscriptions.my');
@@ -150,6 +152,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
 | Admin Routes
 |--------------------------------------------------------------------------
 */
+
+/*
+|--------------------------------------------------------------------------
+| Xendit Webhook Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::post('/webhooks/xendit/invoice', [XenditWebhookController::class, 'handleInvoice'])
+    ->name('webhooks.xendit.invoice');
 
 Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
